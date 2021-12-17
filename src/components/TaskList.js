@@ -13,7 +13,7 @@ const TaskList = ({ tasks, completedCallBack, deleteCallBack }) => {
         done={task.done}
         completedCallBack={completedCallBack}
         deleteCallBack={deleteCallBack}
-      ></Task>
+      />
     );
   });
 
