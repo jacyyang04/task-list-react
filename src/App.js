@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import TaskList from './components/TaskList';
 
-const TASKS = [
-  {
-    id: 1,
-    text: 'Mow the lawn',
-    done: false,
-  },
-  {
-    id: 2,
-    text: 'Cook Pasta',
-    done: true,
-  },
-];
+// const TASKS = [
+//   {
+//     id: 1,
+//     text: 'Mow the lawn',
+//     done: false,
+//   },
+//   {
+//     id: 2,
+//     text: 'Cook Pasta',
+//     done: true,
+//   },
+// ];
 
 const App = () => {
-  const [taskState, updateTaskState] = useState(TASKS);
+  const [taskState, updateTaskState] = useState([]);
+
+  const getTasks = () => {
+    console.log('get Tasks');
+  };
+
+  useEffect(getTasks, []);
 
   const updateTask = (id) => {
     const newTasks = taskState.map((task) => {
@@ -33,7 +39,18 @@ const App = () => {
   };
 
   const deleteTask = (id) => {
+    // filter returns a new array
     const newTasks = taskState.filter((task) => task.id !== id);
+
+    // for loop example
+    // const newTasks = [];
+
+    // for (let task of taskState) {
+    //   if (task.id != id) {
+    //     newTasks.push(task);
+    //   }
+    // }
+    // creates new taskList with the tasks in newTask
     updateTaskState(newTasks);
   };
 
