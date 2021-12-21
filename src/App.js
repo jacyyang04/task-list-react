@@ -14,7 +14,7 @@ const App = () => {
     axios
       .get(`${URL}/tasks`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         // make a new task list
         const newTasks = response.data.map((task) => {
           return {
