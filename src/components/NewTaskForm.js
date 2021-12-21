@@ -14,6 +14,8 @@ const NewTaskForm = ({ onSubmitCallback }) => {
   };
 
   const handleChange = (event) => {
+    // console.log(event.target)
+    // gets everything in the old state
     const newState = {
       ...taskState,
     };
@@ -39,7 +41,7 @@ const NewTaskForm = ({ onSubmitCallback }) => {
     <div className="NewTaskForm">
       <form className="new-task__form" onSubmit={onSubmit}>
         <div className="new-task__fields">
-          <label htmlFor="text">Title</label>
+          <label htmlFor="text">New Task</label>
           <input
             name="text"
             id="text"
