@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './NewTaskForm.css';
-import { text } from '@fortawesome/fontawesome-svg-core';
+// import { text } from '@fortawesome/fontawesome-svg-core';
 
 const NewTaskForm = ({ onSubmitCallback }) => {
   const [taskState, setTaskState] = useState({
