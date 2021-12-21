@@ -1,23 +1,23 @@
 import React from 'react';
-import './TaskList.css';
-import Task from './Task';
 import PropTypes from 'prop-types';
+import Task from './Task';
+import './TaskList.css';
 
-const TaskList = ({ tasks, completedCallBack, deleteCallBack }) => {
-  const taskComponent = tasks.map((task) => {
+const TaskList = ({ tasks, completedCallback, deleteTaskCallback }) => {
+  const taskComponents = tasks.map((task) => {
     return (
       <Task
         key={task.id}
         id={task.id}
         text={task.text}
         done={task.done}
-        completedCallBack={completedCallBack}
-        deleteCallBack={deleteCallBack}
+        completedCallback={completedCallback}
+        deleteTaskCallback={deleteTaskCallback}
       />
     );
   });
 
-  return <ul className="tasks__list no-bullet">{taskComponent}</ul>;
+  return <ul className="tasks__list no-bullet">{taskComponents}</ul>;
 };
 
 TaskList.propTypes = {
@@ -28,8 +28,8 @@ TaskList.propTypes = {
       done: PropTypes.bool.isRequired,
     })
   ).isRequired,
-  completedCallBack: PropTypes.func.isRequired,
-  deleteCallBack: PropTypes.func.isRequired,
+  completedCallback: PropTypes.func.isRequired,
+  deleteTaskCallback: PropTypes.func.isRequired,
 };
 
 export default TaskList;

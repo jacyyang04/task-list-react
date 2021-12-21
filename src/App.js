@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import TaskList from './components/TaskList';
-import axios from 'axios';
+import NewTaskForm from './components/NewTaskForm';
 
 const URL = 'https://adas-task-list.herokuapp.com';
 
 const App = () => {
   const [taskState, updateTaskState] = useState([]);
 
-  // getting current tasklist from api
   const getTasks = () => {
-    console.log('getting tasks..');
+    // Get stuff from API
     axios
       .get(`${URL}/tasks`)
       .then((response) => {
-        // console.log(response.data);
-        // make a new task list
+        console.log(response.data);
         const newTasks = response.data.map((task) => {
           return {
             id: task.id,
@@ -23,6 +22,7 @@ const App = () => {
             done: task.is_complete,
           };
         });
+
         updateTaskState(newTasks);
       })
       .catch((error) => {
@@ -32,7 +32,6 @@ const App = () => {
 
   useEffect(getTasks, []);
 
-  // updating the API
   const updateApi = (task) => {
     const completeOrIncomplete = task.done ? 'incomplete' : 'complete';
 
@@ -46,7 +45,7 @@ const App = () => {
       });
   };
 
-  const updateTask = (id) => {
+  const toggleTaskComplete = (id) => {
     const newTasks = taskState.map((task) => {
       if (task.id === id) {
         updateApi(task);
@@ -58,36 +57,57 @@ const App = () => {
       }
       return task;
     });
+
     updateTaskState(newTasks);
   };
 
   const deleteTask = (id) => {
     console.log(`Delete task ${id}`);
+    // const newTasks = [];
+    // for (let task of taskState) {
+    //   if (task.id !== id) {
+    //     newTasks.push(task);
+    //   }
+    // }
     axios
       .delete(`${URL}/tasks/${id}`)
       .then((response) => {
         console.log(response.data);
-        // getTasks(); --> this way works too.
-        const newTasks = taskState.filter((task) => task.id !== id);
-        updateTaskState(newTasks);
+        getTasks();
+        // const newTasks = taskState.filter((task) => task.id !== id);
+
+        // updateTaskState(newTasks);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
+  };
 
-    // filter returns a new array
-    // const newTasks = taskState.filter((task) => task.id !== id);
+  const addTask = (task) => {
+    let done = null;
+    if (task.done) {
+      done = new Date();
+    }
 
-    // for loop example
-    // const newTasks = [];
-
-    // for (let task of taskState) {
-    //   if (task.id != id) {
-    //     newTasks.push(task);
-    //   }
-    // }
-    // creates new taskList with the tasks in newTask
-    // updateTaskState(newTasks);
+    axios
+      .post(`${URL}/tasks`, {
+        title: task.text,
+        // eslint-disable-next-line camelcase
+        completed_at: done,
+        description: '',
+      })
+      .then((response) => {
+        // console.log(response.data);
+        const newTasks = [...taskState];
+        task.id = response.data.task.id;
+        newTasks.push(task);
+        updateTaskState(newTasks);
+        // Alternative way to update the state
+        // getTasks();
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   };
 
   return (
@@ -98,10 +118,13 @@ const App = () => {
       <main>
         <div>
           <TaskList
+            completedCallback={toggleTaskComplete}
+            deleteTaskCallback={deleteTask}
             tasks={taskState}
-            completedCallBack={updateTask}
-            deleteCallBack={deleteTask}
           />
+        </div>
+        <div>
+          <NewTaskForm onSubmitCallback={addTask} />
         </div>
       </main>
     </div>
